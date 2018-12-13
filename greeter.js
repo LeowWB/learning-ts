@@ -106,3 +106,83 @@ var mrSnake = new Snake("Uncle", "S.", "Nake");
 //must be the same.
 var greeting = greeter(user);
 document.body.innerHTML = greeting;
+var Jellyfish = /** @class */ (function () {
+    function Jellyfish(isMoon) {
+        if (isMoon === void 0) { isMoon = false; }
+        this.moon = isMoon;
+    }
+    return Jellyfish;
+}());
+var JellyfishV2 = /** @class */ (function () {
+    //similar to "public", "readonly" declares class-level variable.
+    function JellyfishV2(moon) {
+        if (moon === void 0) { moon = false; }
+        this.moon = moon;
+    }
+    return JellyfishV2;
+}());
+var MoonJellyfish = /** @class */ (function (_super) {
+    __extends(MoonJellyfish, _super);
+    //notice that the overriding constructor can have different parameters
+    function MoonJellyfish() {
+        return _super.call(this, true) || this;
+    }
+    Object.defineProperty(MoonJellyfish.prototype, "bellSize", {
+        //getter function
+        get: function () {
+            return this._bellSize;
+        },
+        //setter function. obviously this wouldn't exist for a readonly variable.
+        set: function (bs) {
+            this._bellSize = bs;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return MoonJellyfish;
+}(JellyfishV2));
+var EarthJellyfish = /** @class */ (function (_super) {
+    __extends(EarthJellyfish, _super);
+    function EarthJellyfish(g_lost) {
+        var _this = _super.call(this, false) || this;
+        //"static" keyword works exactly the way you'd expect it to.
+        EarthJellyfish.GRAVITATIONAL_CONSTANT -= g_lost;
+        return _this;
+    }
+    //declaring static variable
+    EarthJellyfish.GRAVITATIONAL_CONSTANT = 9.81;
+    return EarthJellyfish;
+}(JellyfishV2));
+//abstract classes work as you're used to, too. key difference between abstract class and
+//interface is that the former can include implementation details for its members.
+var CelestialJellyfish = /** @class */ (function (_super) {
+    __extends(CelestialJellyfish, _super);
+    function CelestialJellyfish() {
+        return _super.call(this, false) || this;
+    }
+    //other methods can be implemented. overriding is optional.
+    CelestialJellyfish.prototype.sting = function () {
+        return "oof ow owie";
+    };
+    return CelestialJellyfish;
+}(JellyfishV2));
+var BlackHoleJellyfish = /** @class */ (function (_super) {
+    __extends(BlackHoleJellyfish, _super);
+    //if subclass has constructor, it must call super(). this isn't unique to abstract class subclasses.
+    function BlackHoleJellyfish() {
+        return _super.call(this) || this;
+    }
+    //overriding abstract method
+    BlackHoleJellyfish.prototype.start_intelligent_life = function () {
+        return "Intelligent life can't exist in a black hole jellyfish.";
+    };
+    BlackHoleJellyfish.prototype.consume_matter = function () {
+    };
+    return BlackHoleJellyfish;
+}(CelestialJellyfish));
+var cj;
+cj = new BlackHoleJellyfish();
+//the following line gives an error, as CelestialJellyfish doesn't have a consume_matter() function.
+//this is in spite of the fact that the value stored in the variable does, indeed, have such a function.
+//typecasting is required (so it's not automatic like standard js)
+//cj.consume_matter();

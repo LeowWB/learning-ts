@@ -115,10 +115,6 @@ let mrSnake = new Snake("Uncle", "S.", "Nake");
 //mrSnake = new SnakeInNTU("Auntie", "S.", "Nake");
 
 
-
-
-
-
 //notice that variable "user" is of type Student, while greeter expects an argument of type Person.
 //also notice that Student doesn't explicitly extend Person.
 //however the line of code below doesn't give any issues or errors.
@@ -130,3 +126,101 @@ let mrSnake = new Snake("Uncle", "S.", "Nake");
 let greeting = greeter(user);
 
 document.body.innerHTML = greeting;
+
+
+
+
+class Jellyfish {
+	
+	//readonly variables are like const except that they can be (re)declared in the constructor
+	readonly moon: boolean;
+
+	constructor(isMoon: boolean = false) {
+		this.moon = isMoon;
+	}
+}
+
+class JellyfishV2 {
+
+	//similar to "public", "readonly" declares class-level variable.
+	constructor(readonly moon: boolean = false) {
+	}
+}
+
+class MoonJellyfish extends JellyfishV2 {
+
+	//although you don't have to, it's good practice to name private vars starting with underscore.
+	//this also ensures that the name of the var doesn't clash with the names of the getter and setter
+	//functions.
+	private _bellSize: number;
+
+	//notice that the overriding constructor can have different parameters
+	constructor() {
+		super(true);
+	}
+
+	//getter function
+	get bellSize(): number{
+		return this._bellSize;
+	}
+
+	//setter function. obviously this wouldn't exist for a readonly variable.
+	set bellSize(bs: number) {
+		this._bellSize = bs;
+	}
+}
+
+class EarthJellyfish extends JellyfishV2 {
+
+	//declaring static variable
+	public static GRAVITATIONAL_CONSTANT = 9.81;
+
+	public constructor(g_lost) {
+		super(false);
+
+		//"static" keyword works exactly the way you'd expect it to.
+		EarthJellyfish.GRAVITATIONAL_CONSTANT -= g_lost;
+	}
+}
+
+//abstract classes work as you're used to, too. key difference between abstract class and
+//interface is that the former can include implementation details for its members.
+abstract class CelestialJellyfish extends JellyfishV2 {
+
+	//methods marked abstract have no implementation provided, and must be implemented in subclasses
+	abstract start_intelligent_life(): string;
+	
+	constructor() {
+		super(false);
+	}
+
+	//other methods can be implemented. overriding is optional.
+	sting(): string {
+		return "oof ow owie";
+	}
+}
+
+class BlackHoleJellyfish extends CelestialJellyfish {
+
+	//if subclass has constructor, it must call super(). this isn't unique to abstract class subclasses.
+	constructor() {
+		super();
+	}
+
+	//overriding abstract method
+	start_intelligent_life(): string {
+		return "Intelligent life can't exist in a black hole jellyfish.";
+	}
+
+	consume_matter(): void {
+	}
+}
+
+let cj: CelestialJellyfish;
+cj = new BlackHoleJellyfish();
+
+//the following line gives an error, as CelestialJellyfish doesn't have a consume_matter() function.
+//this is in spite of the fact that the value stored in the variable does, indeed, have such a function.
+//typecasting is required (so it's not automatic like standard js)
+//cj.consume_matter();
+
